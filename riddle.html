@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiddleRealm</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="riddle">Riddle will appear here</h2>
+        <input type="text" id="answer" placeholder="Your answer here">
+        <button onclick="submitAnswer()">Submit</button>
+        <p id="feedback"></p>
+        <div id="progress">Riddle 1 of 5</div>
+    </div>
+
+    <script>
+        let currentRiddle = 0;
+        let score = 0; 
+        let wrongAnswers = []; // To store incorrect answers
+        let selectedRiddles = [];
+        let riddles = [
+    { question: "What has keys but can't open locks?", answer: "keyboard" },
+    { question: "What comes down but never goes up?", answer: "rain" },
+    { question: "I speak without a mouth and hear without ears. What am I?", answer: "echo" },
+    { question: "What has a head, a tail, but no body?", answer: "coin" },
+    { question: "The more you take, the more you leave behind. What are they?", answer: "footsteps" },
+    { question: "What has to be broken before you can use it?", answer: "egg" },
+    { question: "I’m tall when I’m young, and I’m short when I’m old. What am I?", answer: "candle" },
+    { question: "What month of the year has 28 days?", answer: "all" },
+    { question: "What is full of holes but still holds water?", answer: "sponge" },
+    { question: "What can’t talk but will reply when spoken to?", answer: "echo" },
+    { question: "What has one eye, but can’t see?", answer: "needle" },
+    { question: "What gets bigger the more you take away?", answer: "hole" },
+    { question: "What can travel around the world while staying in the corner?", answer: "stamp" },
+    { question: "What has many keys but can't open a single door?", answer: "piano" },
+    { question: "What has legs but doesn’t walk?", answer: "table" },
+    { question: "The more of this there is, the less you see. What is it?", answer: "darkness" },
+    { question: "What runs but never walks, has a bed but never sleeps?", answer: "river" },
+    { question: "I shave every day, but my beard stays the same. What am I?", answer: "barber" },
+    { question: "I have branches, but no fruit, trunk or leaves. What am I?", answer: "bank" },
+    { question: "What has 13 hearts, but no other organs?", answer: "deck of cards" },
+    { question: "What building has the most stories?", answer: "library" },
+    { question: "I’m light as a feather, yet the strongest man can’t hold me for much longer. What am I?", answer: "breath" },
+    { question: "What has a bottom at the top?", answer: "leg" },
+    { question: "What is so fragile that saying its name breaks it?", answer: "silence" },
+    { question: "What can fill a room but takes up no space?", answer: "light" },
+    { question: "The more you have of it, the less you see. What is it?", answer: "darkness" },
+    { question: "What disappears as soon as you say its name?", answer: "silence" },
+    { question: "What is always in front of you but can’t be seen?", answer: "future" },
+    { question: "I have keys but no locks. I have space but no room. You can enter but can’t go outside. What am I?", answer: "keyboard" },
+    { question: "What invention lets you look right through a wall?", answer: "window" },
+    { question: "What goes up but never comes down?", answer: "age" },
+    { question: "What is always running but never gets tired?", answer: "time" },
+    { question: "What has cities, but no houses; forests, but no trees; and rivers, but no water?", answer: "map" },
+    { question: "What starts with an E, ends with an E, but only has one letter?", answer: "envelope" },
+    { question: "The more you take, the more you leave behind. What are they?", answer: "footsteps" },
+    { question: "What word is spelled wrong in every dictionary?", answer: "wrong" },
+    { question: "What can you hold in your left hand but not in your right?", answer: "right elbow" },
+    { question: "What has teeth but can’t bite?", answer: "comb" },
+    { question: "What kind of room has no doors or windows?", answer: "mushroom" },
+    { question: "What has a heart that doesn’t beat?", answer: "artichoke" },
+    { question: "What can be caught but never thrown?", answer: "cold" },
+    { question: "I’m not alive, but I grow. I don’t have lungs, but I need air. What am I?", answer: "fire" },
+    { question: "What has hands but can’t clap?", answer: "clock" },
+    { question: "What can run but never walks?", answer: "water" },
+    { question: "I have cities but no houses. I have mountains but no trees. I have water but no fish. What am I?", answer: "map" },
+    { question: "The more there is, the less you see. What is it?", answer: "fog" },
+    { question: "What is at the end of a rainbow?", answer: "w" },
+    { question: "What has four wheels and flies?", answer: "garbage truck" },
+    { question: "I have a neck but no head. What am I?", answer: "bottle" },
+    { question: "I’m a five-letter word and people eat me. If you remove my first letter, I become a form of energy. What am I?", answer: "wheat" }
+];
+
+
+        // Select 5 random riddles
+        function selectRiddles() {
+            while (selectedRiddles.length < 5) {
+                const randomIndex = Math.floor(Math.random() * riddles.length);
+                if (!selectedRiddles.includes(riddles[randomIndex])) {
+                    selectedRiddles.push(riddles[randomIndex]);
+                }
+            }
+        }
+
+        selectRiddles(); 
+
+        function submitAnswer() {
+            let userAnswer = document.getElementById('answer').value.toLowerCase();
+            let feedback = document.getElementById('feedback');
+            if (userAnswer === selectedRiddles[currentRiddle].answer.toLowerCase()) {
+                feedback.textContent = "Correct!";
+                score++;
+            } else {
+                feedback.textContent = `Incorrect. The correct answer was: ${selectedRiddles[currentRiddle].answer}`;
+                wrongAnswers.push(selectedRiddles[currentRiddle]); // Store incorrect answer
+            }
+
+            nextRiddle();
+        }
+
+        function nextRiddle() {
+            currentRiddle++;
+            if (currentRiddle < selectedRiddles.length) {
+                document.getElementById('riddle').textContent = selectedRiddles[currentRiddle].question;
+                document.getElementById('progress').textContent = `Riddle ${currentRiddle + 1} of 5`;
+                document.getElementById('answer').value = "";
+                document.getElementById('feedback').textContent = "";
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            localStorage.setItem('playerScore', score);
+            localStorage.setItem('wrongAnswers', JSON.stringify(wrongAnswers)); // Store wrong answers
+            window.location.href = "result.html";
+        }
+
+        document.getElementById('riddle').textContent = selectedRiddles[currentRiddle].question;
+    </script>
+</body>
+</html>

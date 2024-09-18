@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiddleRealm-Results</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Your Score</h2>
+        <p id="finalScore">You scored X out of 5.</p>
+        <h3>Review</h3>
+        <div id="review"></div>
+        <button onclick="tryAgain()">Try Again</button>
+    </div>
+
+    <script>
+        // Retrieve the score from localStorage
+        const score = localStorage.getItem('playerScore');
+        document.getElementById('finalScore').textContent = `You scored ${score} out of 5.`;
+
+        // Retrieve wrong answers from localStorage
+        const wrongAnswers = JSON.parse(localStorage.getItem('wrongAnswers'));
+
+        const reviewContainer = document.getElementById('review');
+        if (wrongAnswers.length > 0) {
+            wrongAnswers.forEach(riddle => {
+                const reviewItem = document.createElement('p');
+                reviewItem.textContent = `Q: ${riddle.question} - Correct Answer: ${riddle.answer}`;
+                reviewContainer.appendChild(reviewItem);
+            });
+        } else {
+            reviewContainer.textContent = "You answered all the questions correctly!";
+        }
+
+        // Function to retry the quiz
+        function tryAgain() {
+            localStorage.removeItem('playerScore'); // Clear the stored score
+            localStorage.removeItem('wrongAnswers'); // Clear the wrong answers
+            window.location.href = "riddle.html"; // Redirect to the riddle page
+        }
+    </script>
+</body>
+</html>
